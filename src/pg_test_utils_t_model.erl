@@ -15,11 +15,6 @@
 %% API
 %% callbacks
 -export([
-  %% table define related
-  table_config/0
-]).
-
--export([
   pr_formatter/1
   , get/2
 ]).
