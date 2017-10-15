@@ -9,6 +9,7 @@
 -define(TEST_REPO, pg_test_utils_t_repo).
 -define(TEST_REPO_TBL, mchants).
 -define(TEST_MODEL, pg_test_utils_t_model).
+-define(TEST_PROTOCOL, pg_test_utils_t_protocol_up_resp_pay).
 
 %%====================================================================
 %% API functions
@@ -23,7 +24,9 @@ name(repo) ->
 name(model) ->
   ?TEST_MODEL;
 name(table) ->
-  ?TEST_REPO_TBL.
+  ?TEST_REPO_TBL;
+name(protocol) ->
+  ?TEST_PROTOCOL.
 
 %%====================================================================
 %% Internal functions

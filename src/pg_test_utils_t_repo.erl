@@ -24,7 +24,7 @@
   , get/2
 ]).
 
--compile(export_all).
+%%-compile(export_all).
 %%-------------------------------------------------------------
 -define(TBL, mchants).
 
