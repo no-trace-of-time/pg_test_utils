@@ -19,6 +19,7 @@ new(repo) ->
 new(model) ->
   pg_model:new(?TEST_MODEL, #{id=>1, mcht_full_name=><<"full">>, mcht_short_name=><<"short">>, update_ts=>100}).
 
+
 name(repo) ->
   ?TEST_REPO;
 name(model) ->

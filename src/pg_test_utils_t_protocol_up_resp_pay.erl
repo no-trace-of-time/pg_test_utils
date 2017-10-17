@@ -57,7 +57,7 @@
   , settleDate = <<>>
   , traceNo = <<>>
   , traceTime = <<>>
-  , exchangeRate = <<>>
+  , exchangeRate
 }).
 -type ?TXN() :: #?TXN{}.
 %%-opaque ?TXN() :: #?TXN{}.
