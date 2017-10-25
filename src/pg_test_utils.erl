@@ -7,6 +7,10 @@
   , setup/1
 ]).
 
+-export([
+  env_init/1
+]).
+
 -define(TEST_REPO, pg_test_utils_t_repo).
 -define(TEST_REPO_TBL, mchants).
 -define(TEST_MODEL, pg_test_utils_t_model).
@@ -40,6 +44,20 @@ setup(mnesia) ->
   mnesia:create_schema([node()]),
 
   ok = application:start(mnesia),
+  ok.
+
+
+%%---------------------------------------------------------------------
+-spec env_init(Cfgs :: proplists:proplist()) -> ok.
+
+env_init(Cfgs) when is_list(Cfgs) ->
+  F =
+    fun(App, CfgList) ->
+      [application:set_env(App, Key, Val) || {Key, Val} <- CfgList]
+    end,
+
+  [F(App, CfgList) || {App, CfgList} <- Cfgs],
+
   ok.
 %%====================================================================
 %% Internal functions
