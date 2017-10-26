@@ -65,18 +65,18 @@ env_init(Cfgs) when is_list(Cfgs) ->
 
 db_init(Cfgs) when is_list(Cfgs) ->
   F =
-    fun(Repo, ValueList) ->
-      pg_repo:drop(Repo),
-      pg_repo:init(Repo),
-      [db_init_one_row(Repo, VL) || VL <- ValueList]
+    fun(M, ValueList) ->
+      pg_repo:drop(M),
+      pg_repo:init(M),
+      [db_init_one_row(M, VL) || VL <- ValueList]
     end,
 
-  [F(App, CfgList) || {App, CfgList} <- Cfgs],
+  [F(M, DataList) || {M, DataList} <- Cfgs],
 
   ok.
 
-db_init_one_row(Repo, VL) ->
-  Repo = pg_model:new(Repo, VL),
+db_init_one_row(M, VL) ->
+  Repo = pg_model:new(M, VL),
   pg_repo:save(Repo).
 %%====================================================================
 %% Internal functions
