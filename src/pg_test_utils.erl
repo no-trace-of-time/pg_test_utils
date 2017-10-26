@@ -9,6 +9,7 @@
 
 -export([
   env_init/1
+  , db_init/1
 ]).
 
 -define(TEST_REPO, pg_test_utils_t_repo).
@@ -59,6 +60,24 @@ env_init(Cfgs) when is_list(Cfgs) ->
   [F(App, CfgList) || {App, CfgList} <- Cfgs],
 
   ok.
+%%---------------------------------------------------------------------
+-spec db_init(Cfgs :: proplists:proplist()) -> ok.
+
+db_init(Cfgs) when is_list(Cfgs) ->
+  F =
+    fun(Repo, ValueList) ->
+      pg_repo:drop(Repo),
+      pg_repo:init(Repo),
+      [db_init_one_row(Repo, VL) || VL <- ValueList]
+    end,
+
+  [F(App, CfgList) || {App, CfgList} <- Cfgs],
+
+  ok.
+
+db_init_one_row(Repo, VL) ->
+  Repo = pg_model:new(Repo, VL),
+  pg_repo:save(Repo).
 %%====================================================================
 %% Internal functions
 %%====================================================================
