@@ -1,15 +1,17 @@
 {application, pg_test_utils,
- [{description, "An OTP library"},
-  {vsn, "0.1.0"},
-  {registered, []},
-  {applications,
-   [kernel,
-    stdlib
-   ]},
-  {env,[]},
-  {modules, []},
+  [{description, "An OTP library"},
+    {vsn, "0.1.0"},
+    {registered, []},
+    {applications,
+      [kernel,
+        stdlib
+      ]},
+    {env, [
+      {echo_server_port, 9999}
+    ]},
+    {modules, []},
 
-  {maintainers, []},
-  {licenses, ["Apache 2.0"]},
-  {links, []}
- ]}.
+    {maintainers, []},
+    {licenses, ["Apache 2.0"]},
+    {links, []}
+  ]}.

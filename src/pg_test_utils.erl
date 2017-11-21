@@ -8,6 +8,8 @@
 -export([
   env_init/1
   , db_init/1
+  , lager_init/0
+  , http_echo_server_init/0
 ]).
 
 %%====================================================================
@@ -55,6 +57,37 @@ db_init(Cfgs) when is_list(Cfgs) ->
 db_init_one_row(M, VL) ->
   Repo = pg_model:new(M, VL),
   pg_repo:save(Repo).
+%%------------------------------------------------------------
+lager_init() ->
+  LagerHandlerCfg = [
+    {lager_console_backend, [{level, debug}, {formatter, lager_default_formatter},
+      {formatter_config, [
+        date, " ", time
+        , " [", severity, "]"
+        , {module, [
+          module,
+          {function, [":", function], ""},
+          {line, [":", line], ""}], ""},
+        {pid, ["@", pid], ""},
+        message
+        , "\n"
+
+      ]}]}
+  ],
+  application:set_env(lager, handlers, LagerHandlerCfg),
+  lager:start().
+%%------------------------------------------------------------
+http_echo_server_init() ->
+  Port = application:get_env(pg_test_utils, echo_server_port, 9999),
+  {ok, _Pid} = inets:start(httpd, [
+    {module, [mod_esi]},
+    {port, Port},
+    {server_name, "localhost"},
+    {document_root, "."},
+    {server_root, "."},
+    {erl_script_alias, {"/esi", [pg_test_utils_echo_server]}}
+  ]).
+
 %%====================================================================
 %% Internal functions
 %%====================================================================

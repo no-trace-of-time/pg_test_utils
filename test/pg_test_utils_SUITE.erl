@@ -15,6 +15,7 @@
 
 setup() ->
   pg_test_utils:setup(mnesia),
+  pg_test_utils:http_echo_server_init(),
   ok.
 
 my_test_() ->
@@ -25,6 +26,7 @@ my_test_() ->
       inorder,
       [
         fun mnesia_test_1/0
+        , fun echo_server_test_1/0
 
       ]
     }
@@ -32,4 +34,14 @@ my_test_() ->
 
 mnesia_test_1() ->
   ?assertEqual([nonode@nohost], mnesia:table_info(schema, disc_copies)),
+  ok.
+
+
+echo_server_test_1() ->
+  {ok, {{_, StatusCode, _}, _Header, Body}} =
+    httpc:request(post,
+      {"http://localhost:9999/esi/pg_test_utils_echo_server:echo", [], "application/x-www-form-urlencoded",
+        <<"a=b&c=d">>}, [], []),
+  ?assertEqual(200, StatusCode),
+  ?assertEqual("a=b&c=d", Body),
   ok.
