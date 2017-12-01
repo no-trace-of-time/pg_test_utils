@@ -10,6 +10,7 @@
   , db_init/1
   , lager_init/0
   , http_echo_server_init/0
+  , http_echo_server_init/1
 ]).
 
 %%====================================================================
@@ -78,6 +79,9 @@ lager_init() ->
   lager:start().
 %%------------------------------------------------------------
 http_echo_server_init() ->
+  http_echo_server_init(pg_test_utils_echo_server).
+
+http_echo_server_init(M) when is_atom(M) ->
   Port = application:get_env(pg_test_utils, echo_server_port, 9999),
   {ok, _Pid} = inets:start(httpd, [
     {module, [mod_esi]},
@@ -85,7 +89,7 @@ http_echo_server_init() ->
     {server_name, "localhost"},
     {document_root, "."},
     {server_root, "."},
-    {erl_script_alias, {"/esi", [pg_test_utils_echo_server]}}
+    {erl_script_alias, {"/esi", [M]}}
   ]).
 
 %%====================================================================
